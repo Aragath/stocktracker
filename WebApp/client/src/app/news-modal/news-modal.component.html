@@ -1,0 +1,28 @@
+<div class="modal-header">
+  <div class="modal-header-content">
+    <h1 class="modal-title mb-0"><strong>{{ news.source }}</strong></h1>
+    <p class="mb-0">{{ news.datetime * 1000 | date: 'MMMM d, y' }}</p>
+  </div>
+  <button type="button" class="close-button" aria-label="Close" (click)="closeModal()">
+    <i class="fa-solid fa-xmark fa-2xs" id="close-icon"></i>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="pb-5">
+    <h2 class="mb-0">{{ news.headline }}</h2>
+    <p> 
+      {{ news.summary }}
+      <br>
+      <span style="color: gray;">For more details click <a [href]="news.url" target="_blank">here</a></span>
+    </p>
+  </div>
+  <div class="social-share-block border rounded p-3">
+    <p class="mb-2">Share</p>
+    <a href="https://twitter.com/share?url={{news.url}}&text={{news.headline}}" target="_blank" class="social-icon">
+      <fa-icon [icon]="icon1" class="fa-2x" style="color: black;"></fa-icon>
+    </a>
+    <a href="https://www.facebook.com/sharer/sharer.php?u={{news.url}}" target="_blank" class="social-icon">
+      <fa-icon [icon]="icon2" class="fa-2x"></fa-icon>
+    </a>
+  </div>
+</div>

@@ -1,0 +1,26 @@
+/* html and body take up full height */
+html, body {
+    height: 100%;
+    margin: 0;
+  }
+  
+/* take up at least full height */
+main {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+  
+.content {
+    flex: 1; /* expand content area and push footer down */
+    padding-top: 50px; /* padding between STOCK SEARCH and nav bar */
+    padding-bottom: 20px; /* padding between content and footer */
+}
+  
+/* Footer styles */
+footer {
+    background-color: rgba(0, 0, 0, 0.05);
+    text-align: center;
+    padding: 10px 0;
+}
+  

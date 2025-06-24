@@ -1,0 +1,40 @@
+
+.close-button {
+    border: none;
+    background: none;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+}
+  
+#close-icon{
+    color: #0D6EFD;
+    border-bottom: 1px solid #0D6EFD;
+    padding-bottom: 20%;
+}
+  
+.modal-header-content {
+    flex-grow: 1;
+}
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.modal-header-content h1,
+.modal-header-content p,
+.modal-body h2,
+.modal-body p {
+  word-wrap: break-word; /* ensures words break and wrap */
+}
+
+.social-share-block p,
+.social-icon {
+  overflow-wrap: break-word; /* handles breaking for long words */
+}
+
+.modal-header, .modal-body {
+  max-width: 100%; /* Ensures these elements don't exceed the modal's width */
+}
+  

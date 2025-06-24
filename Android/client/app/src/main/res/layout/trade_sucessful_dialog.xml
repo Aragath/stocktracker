@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/rounded_corners"
+    android:backgroundTint="@color/dark_green">
+
+    <LinearLayout
+        android:id="@+id/successfulDialogTextLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="80dp"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/successfulDialogText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="30dp"
+            android:text="Congratulations!"
+            android:textColor="@color/white"
+            android:textSize="30sp"
+            android:textStyle="bold"/>
+        <TextView
+            android:id="@+id/successfulDialogSubtext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:text="You have successfully bought X shares of AAAA"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textStyle="italic" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded_corners"
+        android:layout_below="@+id/successfulDialogTextLayout"
+        android:layout_centerInParent="true"
+        android:layout_margin="40dp">
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:paddingHorizontal="50dp"
+            android:background="@android:color/transparent"
+            android:text="DONE"
+            android:textColor="@color/dark_green"
+            android:id="@+id/successfulDialogBtn"/>
+    </LinearLayout>
+</RelativeLayout>

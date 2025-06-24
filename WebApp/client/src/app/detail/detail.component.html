@@ -1,0 +1,227 @@
+<!-- loading indicator -->
+<div class="container mt-3 d-flex justify-content-center" *ngIf="searchLoading && !showDetailComponent">
+    <mat-spinner diameter="50"></mat-spinner>
+</div>
+<!-- alert messages -->
+<div class="container">
+    <div class="row">
+        <div class="col-lg-1"></div>
+        <div class="col-12 col-lg-10 my-2 p-0">
+            <div *ngIf="buySuccessful" class="d-flex justify-content-between align-items-center alert alert-success text-center my-1 p-1" role="alert">
+                <div class="flex-grow-1 text-center">{{searchResult.profile.ticker}} bought successfully.</div>
+                <button type="button" class="btn btn-outline-secondary no-border" (click)="buySuccessful=false">
+                    <i class="bi bi-x" id="close-btn"></i>
+                </button>
+            </div>
+            <div *ngIf="sellSuccessful" class="d-flex justify-content-between align-items-center alert alert-danger text-center my-1 p-1" role="alert">
+                <div class="flex-grow-1 text-center">{{searchResult.profile.ticker}} sold successfully.</div>
+                <button type="button" class="btn btn-outline-secondary no-border" (click)="sellSuccessful=false">
+                    <i class="bi bi-x" id="close-btn"></i>
+                </button>
+            </div>
+            <div *ngIf="addWatchlist" class="d-flex justify-content-between align-items-center alert alert-success text-center my-1 p-1" role="alert">
+                <div class="flex-grow-1 text-center">{{searchResult.profile.ticker}} added to Watchlist.</div>
+                <button type="button" class="btn btn-outline-secondary no-border" (click)="addWatchlist=false">
+                    <i class="bi bi-x" id="close-btn"></i>
+                </button>
+            </div>
+            <div *ngIf="removeWatchlist" class="d-flex justify-content-between align-items-center alert alert-danger text-center my-1 p-1" role="alert">
+                <div class="flex-grow-1 text-center">{{searchResult.profile.ticker}} removed from Watchlist.</div>
+                <button type="button" class="btn btn-outline-secondary no-border" (click)="removeWatchlist=false">
+                    <i class="bi bi-x" id="close-btn"></i>
+                </button>
+            </div>
+        </div>
+        <div class="col-lg-1"></div>
+    </div>
+</div>
+<!-- Detail component -->
+<div *ngIf="showDetailComponent" class="pb-4">
+    <div class="container mt-2" *ngIf="!showError">
+        <div class="row">
+            <!-- Ticker and Star Button  -->
+            <div class="col-5 text-center" *ngIf="searchResult && searchResult.profile">
+                <div class="d-flex justify-content-center align-items-center">
+                    <!-- Ticker and Star Button -->
+                    <div class="d-flex flex-row justify-content-center align-items-center">
+                        <h1 class="m-0 p-0 text-thicker">{{ searchResult.profile.ticker }}</h1>
+                        <button class="btn-star" (click)="updateFavorites(searchResult.profile.ticker, searchResult.profile.name)" *ngIf="!isFavorite">
+                            <i class="far fa-star"></i>
+                        </button>
+                        <button class="btn-star" (click)="updateFavorites(searchResult.profile.ticker)" *ngIf="isFavorite">
+                            <i class="fas fa-star" id="favorite"></i>
+                        </button>
+                    </div>
+                </div>
+                <h2 class="m-0" style="color:rgb(91, 97, 103);">{{searchResult.profile.name}}</h2>
+                <div class="mb-1">{{searchResult.profile.exchange}}</div>
+            </div>
+            <!-- company logo -->
+            <div class="col-2 d-flex justify-content-center">
+                <img class="logo-img" src="{{searchResult.profile.logo}}" alt="Company Logo">
+            </div>
+            <!-- Quote  -->
+            <div class="col-5 text-center justify-content-center" *ngIf="searchResult && searchResult.quote">
+                <div *ngIf="searchResult.quote.d > 0" class="increase">
+                    <h1 class="m-0 text-thicker">{{ searchResult.quote.c.toFixed(2) }}</h1>
+                    <h2 class="mb-1">
+                        ▲ {{ searchResult.quote.d.toFixed(2) }}
+                        <span class="d-block d-lg-inline">
+                            ({{ searchResult.quote.dp.toFixed(2) }}%)
+                        </span>
+                    </h2>
+                </div>
+                <div *ngIf="searchResult.quote.d <= 0" class="decrease">
+                    <h1 class="m-0 text-thicker">{{ searchResult.quote.c.toFixed(2) }}</h1>
+                    <h2 class="mb-1">
+                        ▼ {{ searchResult.quote.d.toFixed(2) }}
+                        <span class="d-block d-lg-inline">
+                            ({{ searchResult.quote.dp.toFixed(2) }}%)
+                        </span>
+                    </h2>
+                </div>
+                <div>{{formattedCurrentTime}}</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-5 align-self-center">
+                <button (click)="buyStock()" class="btn btn-success shadow-none btn-no-caps mx-1">Buy</button>
+                <button (click)="sellStock()" *ngIf="isHolding" class="btn btn-danger shadow-none btn-no-caps mx-1">Sell</button>
+            </div>
+            <div class="col-7"></div>
+        </div>
+        <!-- Market Status-->
+        <div class="text-center fw-bold">
+            <p *ngIf="marketOpen" class="m-3 increase">Market is Open</p>
+            <p *ngIf="!marketOpen" class="m-3 decrease">Market is Closed on {{formattedQuoteTime}}</p>
+        </div>
+    </div>
+    <div class="container mt-4" *ngIf="searchResult && !showError">
+        <div class="row">
+            <div class="col-lg-1"></div>
+            <div class="col-12 col-lg-10">
+                <!-- Tabs-->
+                <mat-tab-group dynamicHeight mat-align-tabs="center dynamicHeight mat-stretch-tabs">
+                    <mat-tab label="Summary">
+                        <div class="row">
+                            <!-- Left Portion -->
+                            <div class="col-lg-6">
+                                <div class="row">
+                                    <div class="col-12 col-lg-6 text-center mt-4">
+                                        <b>High Price:</b> {{ searchResult.quote.h.toFixed(2) }}
+                                        <br>
+                                        <b>Low Price:</b> {{ searchResult.quote.l.toFixed(2) }}
+                                        <br>
+                                        <b>Open Price:</b> {{ searchResult.quote.o.toFixed(2) }}
+                                        <br>
+                                        <b>Prev. Close:</b> {{ searchResult.quote.pc.toFixed(2) }}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12 text-center mt-4">
+                                        <h3 class="m-0 fs-6 text-thicker"><u>About the company</u></h3>
+                                        <br>
+                                        <p><b>IPO Start Date:</b> {{searchResult.profile.ipo}}</p>
+                                        <p><b>Industry:</b> {{searchResult.profile.finnhubIndustry}}</p>
+                                        <p><b>Webpage: </b> <a href="{{searchResult.profile.weburl}}" target="_blank">{{searchResult.profile.weburl}}</a></p>
+                                        <p><b>Company peers:</b></p>
+                                        <span *ngFor="let peer of searchResult.peers">
+                                            <a (click)="onPeerClick(peer)" class="peer-link">{{peer}}</a>,
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Right Portion -->
+                            <div class="col-lg-6 mt-2">
+                                <highcharts-chart 
+                                [Highcharts]="hourlyCharts"
+                                [options]="hourlyOptions"
+                                [constructorType]="hourlyConstructor"
+                                style="width: 100%; height: 325px; display: block;">
+                                </highcharts-chart>
+                            </div>
+                        </div>
+                    </mat-tab>
+                    <!-- News Tab-->
+                    <mat-tab label="Top News">
+                        <div class="container" id="news-content">
+                            <div class="row p-1">
+                                <div class="card col-10 col-lg-5 m-2 bg-light mx-auto p-0" style="min-width: 48%; max-height: 500px;" *ngFor="let newsItem of newsData" (click)="openModal(newsItem)">
+                                    <div class="card-body row">
+                                        <div class="col-lg-3 m-0 p-0 my-auto">
+                                            <img class="card-img m-0 my-auto" src="{{newsItem.image}}" alt="...">
+                                        </div>
+                                        <div class="col text-center d-flex align-items-center justify-content-center">
+                                            <h5 class="card-headline m-0">{{newsItem.headline}}</h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </mat-tab>
+                    <mat-tab label="Charts">
+                        <highcharts-chart 
+                        [Highcharts]="chartCharts"
+                        [options]="chartOptions"
+                        [constructorType]="chartConstructor"
+                        style="width: 100%; height: 600px; display: block;">
+                        </highcharts-chart>
+                    </mat-tab>
+                    <mat-tab label="Insights">
+                        <div class="row">
+                            <div class="col-md-3"></div>
+                            <div class="col-md-6 text-center">
+                                <h2 class="m-0">Insider Sentiments</h2>
+                                <table class="table mx-auto" style="table-layout: fixed; width: 100%;">
+                                    <tr>
+                                        <th>{{searchResult.profile.name}}</th>
+                                        <th>MSPR</th>
+                                        <th>Change</th>
+                                    </tr>
+                                    <tr>
+                                        <th>Total</th>
+                                        <td>{{MSPR[0]}}</td>
+                                        <td>{{CHANGE[0]}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Positive</th>
+                                        <td>{{MSPR[1]}}</td>
+                                        <td>{{CHANGE[1]}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Negative</th>
+                                        <td>{{MSPR[2]}}</td>
+                                        <td>{{CHANGE[2]}}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="col-md-3"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <highcharts-chart 
+                                [Highcharts]="recommendCharts"
+                                [options]="recommendOptions"
+                                style="width: 100%; height: 325px; display: block;">
+                                </highcharts-chart>
+                            </div>
+                            <div class="col-md-6">
+                                <highcharts-chart 
+                                [Highcharts]="surpriseCharts"
+                                [options]="surpriseOptions"
+                                style="width: 100%; height: 325px; display: block;">
+                                </highcharts-chart>
+                            </div>
+                        </div>
+                    </mat-tab>
+                </mat-tab-group>
+            </div>
+            <div class="col-lg-1"></div>
+        </div>  
+    </div>
+    <div *ngIf="showError" class="container mt-5">
+        <div class="alert alert-danger text-center text-dark" role="alert">
+            No data found. Please enter a valid Ticker.
+        </div>
+    </div>
+</div>

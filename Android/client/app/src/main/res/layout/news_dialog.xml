@@ -1,0 +1,82 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp"
+    android:background="@drawable/rounded_corners">
+
+    <TextView
+        android:id="@+id/dialogSource"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:text="News Source"
+        android:paddingTop="8dp"
+        android:textColor="@color/black"/>
+
+    <TextView
+        android:id="@+id/dialogDatetime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/dialogSource"
+        android:text="1 Jan 1900"
+        android:paddingTop="4dp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/gray"
+        android:layout_below="@id/dialogDatetime"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="10dp"
+        android:id="@+id/horizontalLine"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="dialogTitle"
+        android:id="@+id/dialogTitle"
+        android:layout_below="@+id/horizontalLine"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@color/black"/>
+
+    <TextView
+        android:id="@+id/dialogSummary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/dialogTitle"
+        android:text="dialog summary"
+        android:paddingTop="4dp"
+        android:scrollHorizontally="true"
+        android:ellipsize="end"
+        android:maxLines="10"
+        android:layout_marginBottom="25dp"
+        android:textColor="@color/black"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/dialogSummary">
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:src="@drawable/chrome"
+            android:id="@+id/dialogChrome"/>
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_weight="1"
+            android:layout_height="50dp"
+            android:src="@drawable/twitter_x_icon"
+            android:id="@+id/dialogX"/>
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_weight="1"
+            android:layout_height="50dp"
+            android:src="@drawable/facebook"
+            android:id="@+id/dialogFb"/>
+    </LinearLayout>
+
+</RelativeLayout>

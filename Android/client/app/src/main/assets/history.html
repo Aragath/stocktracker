@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>History Chart</title>
+    <script src="https://code.highcharts.com/stock/highstock.js"></script>
+    <script src="https://code.highcharts.com/stock/modules/data.js"></script>
+    <script src="https://code.highcharts.com/stock/indicators/indicators.js"></script>
+    <script src="https://code.highcharts.com/stock/indicators/volume-by-price.js"></script>
+    <script src="https://code.highcharts.com/stock/indicators/sma.js"></script>
+</head>
+<body>
+    <div id="container" style="width:100%; height:100%;"></div>
+    <script>
+        // initialize chart with fetched data
+        function prepareHistoryData(inputData) {
+            data = inputData.results;
+            const ohlc = [], volume = [];
+            for (let i = 0; i < data.length; i += 1) {
+                ohlc.push([
+                    data[i].t, // the date
+                    data[i].o, // open
+                    data[i].h, // high
+                    data[i].l, // low
+                    data[i].c // close
+                ]);
+                volume.push([
+                    data[i].t, // the date
+                    data[i].v // the volume
+                ]);
+            }
+            Highcharts.stockChart('container', {
+                rangeSelector: {
+                    buttons: [
+                        {type: 'month', count: 1, text: '1m'},
+                        {type: 'month', count: 3, text: '3m'},
+                        {type: 'month', count: 6, text: '6m'},
+                        {type: 'ytd', text: 'YTD'},
+                        {type: 'year', count: 1, text: '1Y'},
+                        {type: 'all', text: 'All'}
+                    ],
+                    selected: 2, // set 6m as default
+                },
+                title: { text: inputData.ticker + ' Historical'},
+                subtitle: { text: 'With SMA and Volume by Price technical indicators'},
+                xAxis: { type: 'datetime' },
+                yAxis: [{   startOnTick: false,
+                            endOnTick: false,
+                            labels: {   align: 'right',
+                                        x: -3},
+                            title: { text: 'OHLC'},
+                            height: '60%',
+                            lineWidth: 2,
+                            resize: { enabled: true }},
+                        {   labels: { align: 'right',
+                                      x: -3},
+                            title: { text: 'Volume' },
+                            top: '65%',
+                            height: '35%',
+                            offset: 0,
+                            lineWidth: 2 }
+                ],
+                tooltip: {
+                    split: true,
+                    crosshairs: true, // vertical line
+                },
+                chart: {
+                    height: 375,
+                },
+                time: {
+                    useUTC: false,
+                    timezone: 'America/Los_Angeles'
+                },
+                series: [
+                  {
+                    type: 'candlestick',
+                    name: inputData.ticker,
+                    id: inputData.ticker,
+                    zIndex: 2,
+                    data: ohlc,
+                  },
+                  {
+                    type: 'column',
+                    name: 'Volume',
+                    id: 'volume',
+                    data: volume,
+                    yAxis: 1,
+                  },
+                  {
+                    type: 'vbp',
+                    linkedTo: inputData.ticker,
+                    params: { volumeSeriesID: 'volume' },
+                    dataLabels: { enabled: false },
+                    zoneLines: {enabled: false},
+                  },
+                  {
+                    type: 'sma',
+                    linkedTo: inputData.ticker,
+                    zIndex: 1,
+                    marker: { enabled: false },
+                  },
+                ]
+            });
+        }
+        // fetch history data
+        function fetchData(ticker) {
+            const url = `https://myfirstpython-891021.wl.r.appspot.com/history/${ticker}`;
+            fetch(url)
+            .then(response => response.json())
+            .then(data => {prepareHistoryData(data);})
+            .catch(error => console.error('Error fetching history data:', error));
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+.card-img {
+    width: 100%; /* Ensure the image takes up the entire width of its container */
+    height: 100%;
+    object-fit: scale-down;
+    max-height: 300px; /* Set a maximum height to prevent the image from taking up too much space */
+}
+.card-body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+.card-body:hover{
+    cursor: pointer;
+}
+table tr th {
+    padding: 0.5rem;
+}
+table tr{
+    border-bottom: 2px solid #ddd
+}
+table th{
+    font-weight: bold;
+}
+.btn-star {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+.align-self-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.logo-img {
+    max-height: 80px;
+    width: auto;
+    object-fit: contain;
+}
+.btn-no-caps {
+    text-transform: none !important;
+}
+#favorite{
+    color:gold;
+}
+.peer-link{
+    cursor: pointer;
+}
+.increase{
+    color: green;
+}
+.decrease{
+    color: red;
+}
+.text-thicker{
+    font-weight: 500;
+}
+.no-border {
+    border: none !important;
+}
+.btn-outline-secondary.no-border:hover, .btn-outline-secondary.no-border:focus {
+    background-color: transparent;
+    border-color: transparent;
+    box-shadow: none;
+}

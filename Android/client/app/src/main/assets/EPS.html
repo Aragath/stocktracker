@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Recommendation Trends</title>
+    <script src="https://code.highcharts.com/stock/highstock.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+    <script src="https://code.highcharts.com/modules/series-label.js"></script>
+
+</head>
+<body>
+<div id="container" style="width:100%; height:100%;"></div>
+<script>
+    // initialize chart with fetched data
+    function prepareEPSData(data) {
+        let period = [], actual = [], estimate = [], surprises = [];
+        for (let i = 0; i < data.length; i++) {
+            period.push(data[i].period);
+            actual.push(data[i].actual);
+            estimate.push(data[i].estimate);
+            surprises.push(Math.round(data[i].surprise * 100) / 100); // store just the surprise values
+        }
+        Highcharts.chart('container', {
+            chart: { type: 'spline' },
+            title: { text: 'Historical EPS Surprises' },
+            xAxis: {
+                type: 'category',
+                categories: period.map((p, idx) => p + '<br>Surprise: ' + surprises[idx]), // Append surprise to the category label
+                labels: {
+                    useHTML: true
+                }
+            },
+            yAxis: {
+                title: { text: 'Quantity EPS' }
+            },
+            tooltip: {
+                shared: true,
+                split: false,
+                enabled: true,
+                formatter: function () {
+                    var tooltipText = this.x.split('<br>')[0] + '<br/>';
+                    tooltipText += 'Surprise: ' + this.x.split('Surprise: ')[1] + '<br/>';
+                    this.points.forEach(point => {
+                        tooltipText += '<span style="color:' + point.series.color + '">\u25CF</span> ' + point.series.name + ': <b>' + point.y + '</b><br/>';
+                    });
+                    return tooltipText;
+                }
+            },
+            series: [{
+                name: 'Actual',
+                data: actual,
+                type: 'spline'
+            }, {
+                name: 'Estimate',
+                data: estimate,
+                type: 'spline'
+            }]
+        });
+    }
+
+    // fetch EPS data
+    function fetchData(ticker) {
+        const url = `https://myfirstpython-891021.wl.r.appspot.com/earnings/${ticker}`;
+        fetch(url)
+        .then(response => response.json())
+        .then(data => prepareEPSData(data))
+        .catch(error => console.error('Error fetching EPS data:', error));
+    }
+</script>
+</body>
+</html>

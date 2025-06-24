@@ -1,0 +1,24 @@
+h1{
+    font-weight: 500;
+}
+.btn-close{
+    border: none;
+    background: transparent;
+}
+.text-thicker{
+    font-weight: 500;
+}
+.increase{
+    color: green;
+}
+.decrease{
+    color: red;
+}
+.no-watchlist{
+    background-color:#FEF4CD;
+    border-radius: 2px;
+    font-size: small;
+}
+.card:hover{
+    cursor: pointer;
+}

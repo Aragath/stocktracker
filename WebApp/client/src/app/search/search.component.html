@@ -1,0 +1,45 @@
+<form #searchForm>
+  <div class="container">
+    <div class="row justify-content-center mt-4">
+      <div class="col-sm text-center" id="header-text">
+        <h1>STOCK SEARCH</h1>
+      </div>
+    </div>
+    <div class="row justify-content-center">
+      <div class="col-8 col-lg-4 d-flex align-items-center justify-content-center rounded-pill border-color">
+        <div class="input-group">
+          <input #symbolInput type="text" class="form-control rounded-pill no-border" placeholder="Enter stock ticker symbol" (input)="onSearchChange($event)" [(ngModel)]="searchInput" [ngModelOptions]="{standalone: true}" [matAutocomplete]="auto" (keydown.enter)="onClick($event, symbolInput)">
+          <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onOptionSelected($event)">
+            <!-- loading icon -->
+            <mat-option *ngIf="autoLoading && searchInput" class="is-loading"><mat-spinner diameter="50"></mat-spinner></mat-option>
+            <!-- display options -->
+            <mat-option *ngFor="let option of options" [value]="option.symbol">
+              {{ option.symbol }} | {{ option.description }}
+            </mat-option>
+          </mat-autocomplete>
+          <button type="button" class="btn btn-outline-secondary no-border" (click)="onClick($event, symbolInput)">
+            <i class="bi bi-search"></i>
+          </button>
+          <button type="reset" class="btn btn-outline-secondary no-border" (click)="reset()">
+            <i class="bi bi-x" id="reset-btn"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+<div *ngIf="emptyInput" class="container mt-3">
+  <div class="row">
+    <div class="col-lg-2"></div>
+    <div class="col-lg-8">
+      <div class="d-flex justify-content-between align-items-center alert alert-danger text-dark p-1" role="alert">
+        <div class="flex-grow-1 text-center">Please enter a valid ticker</div>
+        <button type="button" class="btn btn-outline-secondary no-border" (click)="emptyInput = false">
+          <i class="bi bi-x" id="close-btn"></i>
+        </button>
+      </div>
+    </div>
+    <div class="col-lg-2"></div>
+  </div>
+</div>
+<app-detail [showDetailComponent]="showDetailComponent" [searchResult]="searchResult" [searchLoading]="searchLoading"></app-detail>

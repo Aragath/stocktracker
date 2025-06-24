@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hourly Chart</title>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+</head>
+<body>
+    <div id="container" style="width:100%; height:100%;"></div>
+    <script>
+        var chart;
+        var color = "#000000";
+        // initialize chart with fetched data
+        function prepareHourlyData(data) {
+            const priceData = data.results.slice(-32).map(item => [item.t, item.c]);
+
+            chart = Highcharts.chart('container', {
+                colors: [color],
+                rangeSelector: { enabled: false },
+                navigator: { enabled: false },
+                title: {
+                    text: data.ticker + ' Hourly Price Variation',
+                    style: { color: 'gray' },
+                },
+                xAxis: { type: 'datetime' },
+                yAxis: {
+                    title: { text: '' },
+                    labels: { align: 'right', x: -2, y: -3},
+                    opposite: true, // Display labels on the right
+                },
+                series: [{
+                    name: data.ticker,
+                    data: priceData,
+                    type: 'line',
+                    marker: { enabled: false },
+                }],
+                tooltip: {
+                    split: true,
+                    crosshairs: true, // vertical line
+                },
+                time: {
+                    useUTC: false,
+                    timezone: 'America/Los_Angeles'
+                },
+                legend: { enabled: false },
+                chart: {
+                    height: 375,
+                }
+            });
+        }
+        // fetch hourly data
+        function fetchData(ticker) {
+            const url = `https://myfirstpython-891021.wl.r.appspot.com/hourly/${ticker}`;
+            fetch(url)
+            .then(response => response.json())
+            .then(data => {prepareHourlyData(data);})
+            .catch(error => console.error('Error fetching data:', error));
+        }
+        // set chart color dynamically
+        function updateChartColor(newColor) {
+            color = newColor;
+        }
+    </script>
+</body>
+</html>

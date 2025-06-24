@@ -1,0 +1,26 @@
+.input-group {
+    border-radius: 20px;
+    overflow: hidden;
+}
+.border-color {
+    border: 3px solid var(--primary-color);
+}
+.bi {
+    color: var(--primary-color);
+}
+#close-btn{
+    color: gray;
+}
+.no-border {
+    border: none !important;
+}
+.btn-outline-secondary.no-border:hover, .btn-outline-secondary.no-border:focus {
+    background-color: transparent;
+    border-color: transparent;
+    box-shadow: none;
+}
+.form-control.no-border:focus {
+    border-color: transparent;
+    box-shadow: none;
+    outline: none;
+}

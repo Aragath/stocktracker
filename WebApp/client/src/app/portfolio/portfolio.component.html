@@ -1,0 +1,94 @@
+<div class="container"> 
+    <div class="row mt-5">
+        <div class="col-lg-1"></div>
+        <div class="col-12 col-lg-10">
+            <!-- alerts -->
+            <div class="my-2 p-0" *ngIf="buySuccessful || sellSuccessful">
+                <div *ngIf="buySuccessful" class="d-flex justify-content-between align-items-center alert alert-success text-dark my-1 p-1" role="alert">
+                    <div class="flex-grow-1 text-center">{{tradingTarget}} bought successfully.</div>
+                    <button type="button" class="btn btn-outline-secondary no-border" (click)="buySuccessful=false">
+                      <i class="bi bi-x" id="close-btn"></i>
+                    </button>
+                </div>
+                <div *ngIf="sellSuccessful" class="d-flex justify-content-between align-items-center alert alert-danger text-dark my-1 p-1" role="alert">
+                    <div class="flex-grow-1 text-center">{{tradingTarget}} sold successfully.</div>
+                    <button type="button" class="btn btn-outline-secondary no-border" (click)="sellSuccessful=false">
+                      <i class="bi bi-x" id="close-btn"></i>
+                    </button>
+                </div>
+            </div>
+            <!-- header -->
+            <h1 class="watchlist-header m-0 p-0 fs-3">My Portfolio</h1>
+            <!-- spinner -->
+            <div class="mt-5 d-flex justify-content-center" *ngIf="isLoading">
+                <mat-spinner diameter="50"></mat-spinner>
+            </div>
+            <!-- stock cards -->
+            <div class="mt-1" *ngIf="!isLoading">
+                <h2 class="text-thicker mb-2">Money in Wallet: ${{ currentWallet.money.toFixed(2) }}</h2>
+                <div class="row g-0" *ngFor="let stock of holdings; let i=index">
+                    <div class="col-12 mb-2">
+                        <div class="card shadow-none">
+                            <div class="card-header" (click)="cardClick(stock.ticker)">
+                                <div class="row">
+                                    <div class="col-auto pe-0">
+                                        <h1 class="m-0">{{stock.ticker}}</h1>
+                                    </div>
+                                    <div class="col-auto ps-1 pt-1 text-secondary">
+                                        <h3 class="m-0 font-weight-normal text-thicker">{{stock.name}}</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body p-3 text-thicker">
+                                <div class="row fs-5">
+                                    <div class="col-8 col-lg-4">
+                                        <p class="mb-1">Quantity: </p>
+                                        <p class="mb-1">Avg. Cost / Share: </p>
+                                        <p class="mb-1">Total Cost:</p>
+                                    </div>
+                                    <div class="col-4 col-lg-2">
+                                        <p class="mb-1">{{stock.quantity | number:'1.2-2'}}</p>
+                                        <p class="mb-1">{{stock.cost/stock.quantity | number:'1.2-2'}}</p>
+                                        <p class="mb-1">{{stock.cost | number:'1.2-2'}}</p>
+                                    </div>
+                                    <div class="col-8 col-lg-4">
+                                        <p class="mb-1">Change: </p>
+                                        <p class="mb-1">Current Price: </p>
+                                        <p class="mb-1">Market Value:</p>
+                                    </div>
+                                    <div class="col-4 col-lg-2">
+                                        <div *ngIf="+(holdingQuote[i].c.toFixed(2)) > +((stock.cost / stock.quantity).toFixed(2))" class="increase">
+                                            <p class="mb-1" >▲ {{holdingQuote[i].c - stock.cost/stock.quantity | number:'1.2-2'}}</p>
+                                            <p class="mb-1">{{holdingQuote[i].c | number:'1.2-2'}}</p>
+                                            <p class="mb-1">{{holdingQuote[i].c * stock.quantity | number:'1.2-2'}}</p>
+                                        </div>
+                                        <div *ngIf="+(holdingQuote[i].c.toFixed(2)) < +((stock.cost / stock.quantity).toFixed(2))" class="decrease">
+                                            <p class="mb-1" >▼ {{holdingQuote[i].c - stock.cost/stock.quantity | number:'1.2-2'}}</p>
+                                            <p class="mb-1">{{holdingQuote[i].c | number:'1.2-2'}}</p>
+                                            <p class="mb-1">{{holdingQuote[i].c * stock.quantity | number:'1.2-2'}}</p>
+                                        </div>
+                                        <div *ngIf="+(holdingQuote[i].c.toFixed(2)) == +((stock.cost / stock.quantity).toFixed(2))">
+                                            <p class="mb-1" >{{holdingQuote[i].c - stock.cost/stock.quantity | number:'1.2-2'}}</p>
+                                            <p class="mb-1">{{holdingQuote[i].c | number:'1.2-2'}}</p>
+                                            <p class="mb-1">{{holdingQuote[i].c * stock.quantity | number:'1.2-2'}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <button class="btn btn-primary no-caps shadow-none me-1" (click)="buyStock(stock.ticker, stock.name, stock.quantity)">Buy</button>
+                                <button class="btn btn-danger no-caps shadow-none mx-1" (click)="sellStock(stock.ticker, stock.name, stock.quantity)">Sell</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div *ngIf="holdings.length == 0">
+                        <p class="text-center no-holding p-2">Currently you don't have any stock.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-1"></div>
+    </div>
+</div>

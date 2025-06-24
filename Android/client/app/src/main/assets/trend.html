@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Recommendation Trends</title>
+    <script src="https://code.highcharts.com/stock/highstock.js"></script>
+    <script src="https://code.highcharts.com/stock/modules/data.js"></script>
+    <script src="https://code.highcharts.com/stock/indicators/indicators.js"></script>
+    <script src="https://code.highcharts.com/"></script>
+    <script src="https://code.highcharts.com/highstock.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+</head>
+<body>
+<div id="container" style="width:100%; height:100%;"></div>
+<script>
+    // initialize chart with fetched data
+    function prepareTrendData(data) {
+        let period = [], strongBuy = [], buy = [], hold = [], sell = [], strongSell = [];
+        for (let i = 0; i < data.length; i++){
+            let length = data[i].period.length;
+            period.push(data[i].period);
+            strongBuy.push(data[i].strongBuy);
+            buy.push(data[i].buy);
+            hold.push(data[i].hold);
+            sell.push(data[i].sell);
+            strongSell.push(data[i].strongSell);
+        }
+        Highcharts.chart('container', {
+            chart: { type: 'column' },
+            title: { text: 'Recommendation Trends'},
+            xAxis: {
+                type: 'category',
+                categories: period,
+            },
+            yAxis: {
+                min: 0,
+                title: { text: '#Analysis' },
+                stackLabels: {
+                    enabled: true,
+                    style: {
+                        fontWeight: 'bold',
+                        color: 'white',
+                        textOutline: '1px black',
+                    },
+                    formatter: function() {
+                        return this.total;  // Returns the total of each stack
+                    }
+                }
+            },
+            plotOptions: {
+                column: {
+                    stacking: 'normal',
+                },
+            },
+            series: [{
+                name: 'Strong Buy',
+                data: strongBuy,
+                type: 'column',
+                color: 'darkgreen',
+            }, {
+                name: 'Buy',
+                data: buy,
+                type: 'column',
+                color: '#1DB954',
+            }, {
+                name: 'Hold',
+                data: hold,
+                type: 'column',
+                color: '#B07E28',
+            }, {
+                name: 'Sell',
+                data: sell,
+                type: 'column',
+                color: '#F45B5B',
+            }, {
+                name: 'Strong Sell',
+                data: strongSell,
+                type: 'column',
+                color: 'darkred',
+            }],
+        });
+    }
+    // fetch recommend trend data
+    function fetchData(ticker) {
+        const url = `https://myfirstpython-891021.wl.r.appspot.com/trends/${ticker}`;
+        fetch(url)
+        .then(response => response.json())
+        .then(data => {prepareTrendData(data);})
+        .catch(error => console.error('Error fetching trend data:', error));
+    }
+</script>
+</body>
+</html>

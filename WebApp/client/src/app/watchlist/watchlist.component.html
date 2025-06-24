@@ -1,0 +1,53 @@
+<div class="container"> 
+    <div class="row mt-5">
+        <div class="col-lg-1"></div>
+        <div class="col-12 col-lg-10">
+            <h1 class="watchlist-header">My Watchlist</h1>
+            <div class="container mt-5 d-flex justify-content-center" *ngIf="isLoading">
+                <mat-spinner diameter="50"></mat-spinner>
+            </div>
+            <div class="container mt-4" *ngIf="!isLoading">
+                <div class="row" *ngFor="let stock of favorites; let i=index">
+                    <div class="col-11 mb-2 p-0 flex-grow-1">
+                        <div class="card shadow-none">
+                            <button type="button" class="btn-close justify-content-center mt-2 ms-2 pt-0" aria-label="Close" (click)="removeFromFavorites(stock.ticker)">
+                                <!-- <i class="fa-solid fa-xmark fa-2xs"></i> -->
+                                <i class="bi bi-x"></i>
+                            </button>
+                            <div class="card-body pt-1" (click)="cardClick(stock.ticker)">
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="row">
+                                            <h1 class="m-0">{{stock.ticker}}</h1>
+                                        </div>
+                                        <div class="row">
+                                            <h3 class="m-0 font-weight-normal text-thicker">{{stock.name}}</h3>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="row">
+                                            <h1 class="m-0 font-weight-normal text-thicker increase" *ngIf="favoriteQuote[i].d > 0">{{favoriteQuote[i].c}}</h1>
+                                            <h1 class="m-0 font-weight-normal text-thicker decrease" *ngIf="favoriteQuote[i].d <= 0">{{favoriteQuote[i].c}}</h1>
+                                        </div>
+                                        <div class="row">
+                                            <h3 class="m-0 font-weight-normal text-thicker increase" *ngIf="favoriteQuote[i].d > 0">▲ {{favoriteQuote[i].d}} ({{favoriteQuote[i].dp}}%)</h3>
+                                            <h3 class="m-0 font-weight-normal text-thicker decrease" *ngIf="favoriteQuote[i].d < 0">▼ {{favoriteQuote[i].d}} ({{favoriteQuote[i].dp}}%)</h3>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="container mt-4 p-0" *ngIf="favorites.length == 0">
+                    <div class="row">
+                        <div class="col p-0">
+                            <p class="text-center no-watchlist p-2">Currently you don't have any stock in your watchlist.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-1"></div>
+    </div>
+</div>

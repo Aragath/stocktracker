@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Main background color -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/white" />
+        </shape>
+    </item>
+    <!-- Bottom border only -->
+    <item android:top="-4dp" android:right="-4dp" android:left="-4dp">
+        <shape android:shape="rectangle">
+            <solid android:color="@android:color/transparent" />
+            <!-- Only draw a border at the bottom -->
+            <stroke android:width="3dp" android:color="@color/gray" />
+        </shape>
+    </item>
+</layer-list>
